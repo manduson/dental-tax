@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PageContainer, ProForm, ProFormText, ProFormDigit, ProCard, ProFormList } from '@ant-design/pro-components';
-import { Tabs, Button, message, Space, Row, Col, Divider, Select } from 'antd';
-import { SaveOutlined, PrinterOutlined, ZoomInOutlined, ZoomOutOutlined, CalendarOutlined, FileTextOutlined, AuditOutlined, MedicineBoxOutlined } from '@ant-design/icons';
+import { Tabs, Button, message, Space, Row, Col, Divider, Select, Modal } from 'antd';
+import { SaveOutlined, PrinterOutlined, ZoomInOutlined, ZoomOutOutlined, CalendarOutlined, FileTextOutlined, AuditOutlined, MedicineBoxOutlined, SettingOutlined } from '@ant-design/icons';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
@@ -130,6 +130,7 @@ const BusinessReport: React.FC = () => {
     const [formValues, setFormValues] = useState<any>({});
     const [focusedField, setFocusedField] = useState<string | null>(null);
     const [isOptimizeMode, setIsOptimizeMode] = useState(false);
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [hiddenFields, setHiddenFields] = useState<Record<string, boolean>>(() => {
         const saved = localStorage.getItem('user_hidden_fields');
         return saved ? JSON.parse(saved) : {};
@@ -578,6 +579,7 @@ const BusinessReport: React.FC = () => {
                 style={{ width: 120 }}
                 options={[2022, 2023, 2024, 2025].map(y => ({ label: `${y}년`, value: y }))}
             />,
+            <Button key="profile" icon={<SettingOutlined />} onClick={() => setIsProfileModalOpen(true)}>병원정보</Button>,
             <Button key="s" type="primary" icon={<SaveOutlined />} onClick={handleSave} loading={loading}>서류 저장 및 동기화</Button>,
             <Button key="p" icon={<PrinterOutlined />} onClick={() => window.print()}>인쇄</Button>,
             <Button
@@ -597,24 +599,6 @@ const BusinessReport: React.FC = () => {
                     <ProForm form={form} submitter={false} onValuesChange={handleValuesChange}>
                         {mainTab === 'report' ? (
                             <Tabs type="card" items={[
-                                {
-                                    key: 'info',
-                                    label: '기본정보',
-                                    children: (
-                                        <ProCard bordered size="small">
-                                            <Row gutter={8}>
-                                                <Col span={12}><FieldWrapper name="bizName"><ProFormText name="bizName" label="상호" fieldProps={focusHandlers('bizName')} /></FieldWrapper></Col>
-                                                <Col span={12}><FieldWrapper name="repName"><ProFormText name="repName" label="성명" fieldProps={focusHandlers('repName')} /></FieldWrapper></Col>
-                                            </Row>
-                                            <FieldWrapper name="personNo"><ProFormText name="personNo" label="주민등록번호" fieldProps={focusHandlers('personNo')} /></FieldWrapper>
-                                            <FieldWrapper name="address"><ProFormText name="address" label="사업장소재지" fieldProps={focusHandlers('address')} /></FieldWrapper>
-                                            <Row gutter={8}>
-                                                <Col span={12}><FieldWrapper name="tel"><ProFormText name="tel" label="사업장전화" fieldProps={focusHandlers('tel')} /></FieldWrapper></Col>
-                                                <Col span={12}><FieldWrapper name="phone"><ProFormText name="phone" label="휴대전화" fieldProps={focusHandlers('phone')} /></FieldWrapper></Col>
-                                            </Row>
-                                        </ProCard>
-                                    )
-                                },
                                 {
                                     key: '1',
                                     label: '① 수입금액',
@@ -798,6 +782,33 @@ const BusinessReport: React.FC = () => {
                 </Col>
                 <Col span={15}><div className="doc-container">{mainTab === 'report' ? <Form1Mock /> : mainTab === 'review' ? <Form2Mock /> : <Form3Mock />}</div></Col>
             </Row>
+
+            {/* 기본정보 수정 모달 */}
+            <Modal
+                title="병원 기본정보 관리"
+                open={isProfileModalOpen}
+                onCancel={() => setIsProfileModalOpen(false)}
+                footer={[
+                    <Button key="close" type="primary" onClick={() => setIsProfileModalOpen(false)}>확인</Button>
+                ]}
+                width={600}
+            >
+                <div style={{ marginTop: 20 }}>
+                    <Row gutter={16}>
+                        <Col span={12}><ProFormText name="bizName" label="상호" fieldProps={focusHandlers('bizName')} form={form} /></Col>
+                        <Col span={12}><ProFormText name="repName" label="성명" fieldProps={focusHandlers('repName')} form={form} /></Col>
+                    </Row>
+                    <ProFormText name="personNo" label="주민등록번호" fieldProps={focusHandlers('personNo')} form={form} />
+                    <ProFormText name="address" label="사업장소재지" fieldProps={focusHandlers('address')} form={form} />
+                    <Row gutter={16}>
+                        <Col span={12}><ProFormText name="tel" label="사업장전화" fieldProps={focusHandlers('tel')} form={form} /></Col>
+                        <Col span={12}><ProFormText name="phone" label="휴대전화" fieldProps={focusHandlers('phone')} form={form} /></Col>
+                    </Row>
+                    <div style={{ fontSize: '12px', color: '#888', marginTop: 10 }}>
+                        ※ 여기서 수정하는 정보는 서류 프리뷰에 즉시 반영되며, '서류 저장' 시 함께 저장됩니다.
+                    </div>
+                </div>
+            </Modal>
         </PageContainer>
     );
 };
