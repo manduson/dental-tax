@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { PageContainer, ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components';
-import { Button, Space, message, Modal } from 'antd';
+import { Button, message, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { supabase } from '../lib/supabase';
 
@@ -15,7 +15,7 @@ type ExpenseItem = {
 };
 
 const Expenses: React.FC = () => {
-    const actionRef = useRef<ActionType>();
+    const actionRef = useRef<ActionType>(null);
 
     const columns: ProColumns<ExpenseItem>[] = [
         {
@@ -65,7 +65,7 @@ const Expenses: React.FC = () => {
             title: '작업',
             valueType: 'option',
             width: 120,
-            render: (text, record, _, action) => [
+            render: (_text, record, _, action) => [
                 <a
                     key="edit"
                     onClick={() => {
@@ -110,7 +110,7 @@ const Expenses: React.FC = () => {
                 search={{
                     labelWidth: 'auto',
                 }}
-                request={async (params, sorter, filter) => {
+                request={async (params, sorter, _filter) => {
                     let query = supabase.from('dental_expenses').select('*');
 
                     // Sort
@@ -142,7 +142,7 @@ const Expenses: React.FC = () => {
                 }}
                 editable={{
                     type: 'multiple',
-                    onSave: async (key, record) => {
+                    onSave: async (_key, record) => {
                         const { id, ...data } = record;
                         const { error } = await supabase.from('dental_expenses').update(data).eq('id', id);
                         if (error) throw error;

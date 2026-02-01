@@ -3,7 +3,7 @@ import { PageContainer } from '@ant-design/pro-components';
 import { Card, Button, Space, Row, Col, Modal, Form, Input, InputNumber, message, Spin, Tooltip, Select, Tag, Divider } from 'antd';
 import {
     PlusOutlined, EditOutlined, DeleteOutlined, CalendarOutlined, HolderOutlined,
-    CreditCardOutlined, InfoCircleOutlined, SyncOutlined, MobileOutlined,
+    InfoCircleOutlined, SyncOutlined, MobileOutlined,
     HomeOutlined, SafetyOutlined, ThunderboltOutlined, PlaySquareOutlined
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -214,7 +214,7 @@ const CreditCards: React.FC = () => {
     const fetchCards = async () => {
         setLoading(true);
         try {
-            const { data, error } = await supabase
+            const { data } = await supabase
                 .from('dental_credit_cards')
                 .select('*')
                 .order('sort_order', { ascending: true });

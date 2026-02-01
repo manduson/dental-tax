@@ -18,7 +18,7 @@ type RevenueItem = {
 };
 
 const Revenue: React.FC = () => {
-    const actionRef = useRef<ActionType>();
+    const actionRef = useRef<ActionType>(null);
 
     const columns: ProColumns<RevenueItem>[] = [
         {
@@ -81,7 +81,7 @@ const Revenue: React.FC = () => {
             valueType: 'option',
             fixed: 'right',
             width: 120,
-            render: (text, record, _, action) => [
+            render: (_text, record, _, action) => [
                 <a key="edit" onClick={() => action?.startEditable?.(record.id)}>수정</a>,
                 <a key="delete" style={{ color: 'red' }} onClick={() => handleDelete(record.id)}>삭제</a>,
             ],
@@ -127,7 +127,7 @@ const Revenue: React.FC = () => {
                 }}
                 editable={{
                     type: 'multiple',
-                    onSave: async (key, record) => {
+                    onSave: async (_key, record) => {
                         const { id, ...data } = record;
                         const { error } = await supabase.from('dental_revenue').update(data).eq('id', id);
                         if (error) throw error;

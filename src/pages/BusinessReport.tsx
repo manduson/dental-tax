@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PageContainer, ProForm, ProFormText, ProFormDigit, ProFormSelect, ProCard, ProFormList } from '@ant-design/pro-components';
+import { PageContainer, ProForm, ProFormText, ProFormDigit, ProCard, ProFormList } from '@ant-design/pro-components';
 import { Tabs, Button, message, Space, Row, Col, Divider, Select } from 'antd';
 import { SaveOutlined, PrinterOutlined, ZoomInOutlined, ZoomOutOutlined, CalendarOutlined, FileTextOutlined, AuditOutlined, MedicineBoxOutlined } from '@ant-design/icons';
 import { useSearchParams } from 'react-router-dom';
@@ -150,7 +150,7 @@ const BusinessReport: React.FC = () => {
     };
 
     // 필드 래퍼 컴포넌트
-    const FieldWrapper: React.FC<{ name: string; children: React.ReactNode; label?: string; layout?: 'row' | 'col' }> = ({ name, children, label }) => {
+    const FieldWrapper: React.FC<{ name: string; children: React.ReactNode; label?: string; layout?: 'row' | 'col' }> = ({ name, children }) => {
         const isHidden = hiddenFields[name];
 
         if (!isOptimizeMode && isHidden) return null;
@@ -167,7 +167,7 @@ const BusinessReport: React.FC = () => {
             }}>
                 {isOptimizeMode && (
                     <div style={{
-                        position: 'absolute', right: 0, top: -10, zidex: 10,
+                        position: 'absolute', right: 0, top: -10, zIndex: 10,
                         background: isHidden ? '#ff4d4f' : '#1890ff',
                         color: 'white', fontSize: '10px', padding: '0 4px', cursor: 'pointer', borderRadius: '2px'
                     }} onClick={() => toggleFieldVisibility(name)}>
@@ -737,7 +737,7 @@ const BusinessReport: React.FC = () => {
                                         <ProCard bordered size="small">
                                             <div style={{ marginBottom: 12, fontSize: '8pt', color: '#888' }}>※ 입력 시 서류의 해당 행이 하이라이트됩니다.</div>
                                             <ProFormList name="devices" initialValue={[{}, {}, {}, {}]}>
-                                                {(meta, index) => (
+                                                {(_, index) => (
                                                     <div style={{ marginBottom: 16 }}>
                                                         <Row gutter={8}>
                                                             <Col span={4}><FieldWrapper name={`devices_${index}_code`}><ProFormText name="code" label="코드" fieldProps={focusHandlers(`devices_${index}_code`)} /></FieldWrapper></Col>
@@ -759,7 +759,7 @@ const BusinessReport: React.FC = () => {
                                     key: 'non', label: '비보험 수입', children: (
                                         <ProCard bordered size="small">
                                             <ProFormList name="non_ins" initialValue={[{}, {}, {}, {}, {}]}>
-                                                {(meta, index) => (
+                                                {(_, index) => (
                                                     <Row gutter={8}>
                                                         <Col span={4}><FieldWrapper name={`non_ins_${index}_code`}><ProFormText name="code" label="코드" fieldProps={focusHandlers(`non_ins_${index}_code`)} /></FieldWrapper></Col>
                                                         <Col span={10}><FieldWrapper name={`non_ins_${index}_type`}><ProFormText name="type" label="진료유형" fieldProps={focusHandlers(`non_ins_${index}_type`)} /></FieldWrapper></Col>
@@ -774,7 +774,7 @@ const BusinessReport: React.FC = () => {
                                     key: 'mat', label: '사용재료', children: (
                                         <ProCard bordered size="small">
                                             <ProFormList name="materials" initialValue={[{ name: '임플란트' }, { name: '교정용 브리켓' }, { name: '금(골드)' }]}>
-                                                {(meta, index) => (
+                                                {(_, index) => (
                                                     <div style={{ marginBottom: 16 }}>
                                                         <FieldWrapper name={`materials_${index}_name`}><ProFormText name="name" label="재료종류" fieldProps={focusHandlers(`materials_${index}_name`)} /></FieldWrapper>
                                                         <Row gutter={8}>

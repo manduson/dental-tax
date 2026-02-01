@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, Layout } from 'antd';
 import { LayoutDashboard, DollarSign, CreditCard, Package, Upload as UploadIcon, Wallet } from 'lucide-react';
 import { ConfigProvider } from 'antd';

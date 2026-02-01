@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { PageContainer, ProTable, type ActionType, type ProColumns } from '@ant-design/pro-components';
-import { Button, Space, message, Modal, Badge, Tag } from 'antd';
+import { Button, Space, message, Modal, Badge } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { supabase } from '../lib/supabase';
 
@@ -17,7 +17,7 @@ type InventoryItem = {
 };
 
 const Inventory: React.FC = () => {
-    const actionRef = useRef<ActionType>();
+    const actionRef = useRef<ActionType>(null);
 
     const columns: ProColumns<InventoryItem>[] = [
         {
@@ -79,7 +79,7 @@ const Inventory: React.FC = () => {
             title: '작업',
             valueType: 'option',
             width: 120,
-            render: (text, record, _, action) => [
+            render: (_text, record, _, action) => [
                 <a key="edit" onClick={() => action?.startEditable?.(record.id)}>수정</a>,
                 <a key="delete" style={{ color: 'red' }} onClick={() => handleDelete(record.id)}>삭제</a>,
             ],
@@ -118,7 +118,7 @@ const Inventory: React.FC = () => {
                 }}
                 editable={{
                     type: 'multiple',
-                    onSave: async (key, record) => {
+                    onSave: async (_key, record) => {
                         const { id, ...data } = record;
                         const { error } = await supabase.from('dental_inventory').update(data).eq('id', id);
                         if (error) throw error;
