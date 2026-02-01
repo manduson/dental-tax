@@ -194,7 +194,16 @@ const BusinessReport: React.FC = () => {
                 tel: profile.tel,
                 phone: profile.phone,
                 email: profile.email
-            } : {};
+            } : {
+                bizName: '찬치과의원',
+                bizNo: '616-93-18253',
+                repName: '박찬',
+                address: '제주특별자치도 제주시 중앙로371-1, 비 (이도이동,2층)',
+                tel: '064-755-2228',
+                phone: '',
+                email: '',
+                personNo: ''
+            };
 
             if (report) {
                 Object.assign(master,
@@ -791,19 +800,28 @@ const BusinessReport: React.FC = () => {
                 footer={[
                     <Button key="close" type="primary" onClick={() => setIsProfileModalOpen(false)}>확인</Button>
                 ]}
-                width={600}
+                width={700}
             >
                 <div style={{ marginTop: 20 }}>
-                    <Row gutter={16}>
-                        <Col span={12}><ProFormText name="bizName" label="상호" fieldProps={focusHandlers('bizName')} form={form} /></Col>
-                        <Col span={12}><ProFormText name="repName" label="성명" fieldProps={focusHandlers('repName')} form={form} /></Col>
-                    </Row>
-                    <ProFormText name="personNo" label="주민등록번호" fieldProps={focusHandlers('personNo')} form={form} />
-                    <ProFormText name="address" label="사업장소재지" fieldProps={focusHandlers('address')} form={form} />
-                    <Row gutter={16}>
-                        <Col span={12}><ProFormText name="tel" label="사업장전화" fieldProps={focusHandlers('tel')} form={form} /></Col>
-                        <Col span={12}><ProFormText name="phone" label="휴대전화" fieldProps={focusHandlers('phone')} form={form} /></Col>
-                    </Row>
+                    <ProForm
+                        form={form}
+                        submitter={false}
+                        onValuesChange={(changed, all) => handleValuesChange(changed, all)}
+                    >
+                        <Row gutter={16}>
+                            <Col span={12}><ProFormText name="bizName" label="상호" fieldProps={focusHandlers('bizName')} /></Col>
+                            <Col span={12}><ProFormText name="bizNo" label="사업자등록번호" fieldProps={focusHandlers('bizNo')} /></Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}><ProFormText name="repName" label="성명" fieldProps={focusHandlers('repName')} /></Col>
+                            <Col span={12}><ProFormText name="personNo" label="주민등록번호" fieldProps={focusHandlers('personNo')} /></Col>
+                        </Row>
+                        <ProFormText name="address" label="사업장소재지" fieldProps={focusHandlers('address')} />
+                        <Row gutter={16}>
+                            <Col span={12}><ProFormText name="tel" label="사업장전화" fieldProps={focusHandlers('tel')} /></Col>
+                            <Col span={12}><ProFormText name="phone" label="휴대전화" fieldProps={focusHandlers('phone')} /></Col>
+                        </Row>
+                    </ProForm>
                     <div style={{ fontSize: '12px', color: '#888', marginTop: 10 }}>
                         ※ 여기서 수정하는 정보는 서류 프리뷰에 즉시 반영되며, '서류 저장' 시 함께 저장됩니다.
                     </div>
